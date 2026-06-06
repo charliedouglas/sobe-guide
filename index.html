@@ -160,6 +160,20 @@
     70%{box-shadow:0 0 0 20px rgba(46,224,106,0)}
     100%{box-shadow:0 0 0 0 rgba(46,224,106,0)}
   }
+  /* Tartan Army Party @ Domicile (booked) marker */
+  .tartanpin-wrap{background:none!important; border:none!important}
+  .tartanpin{display:flex; flex-direction:column; align-items:center}
+  .tartanpin-dot{width:42px; height:42px; border-radius:50%; background:#2b6fd6;
+    display:flex; align-items:center; justify-content:center; font-size:20px;
+    border:3px solid #fff; box-shadow:0 0 0 0 rgba(43,111,214,.7); animation:tartanpulse 1.8s infinite}
+  .tartanpin-label{margin-top:3px; font-size:9px; font-weight:800; letter-spacing:.5px; color:#fff;
+    background:#2b6fd6; padding:1px 7px; border-radius:10px; border:1px solid #fff;
+    white-space:nowrap; text-transform:uppercase}
+  @keyframes tartanpulse{
+    0%{box-shadow:0 0 0 0 rgba(43,111,214,.7)}
+    70%{box-shadow:0 0 0 20px rgba(43,111,214,0)}
+    100%{box-shadow:0 0 0 0 rgba(43,111,214,0)}
+  }
   .card.fanfest{border-color:rgba(46,224,106,.55); box-shadow:0 14px 46px rgba(46,224,106,.18)}
   .pill.fanfest{background:#2ee06a; color:#06321a}
   .evt.green{background:rgba(46,224,106,.12); border-color:rgba(46,224,106,.34)}
@@ -211,6 +225,7 @@
       <span><i style="background:#ff5e7e"></i> Sunset</span>
       <span><i style="background:#a4318f"></i> Late night</span>
       <span><i style="background:#2ee06a"></i> ⚽ Fan Festival</span>
+      <span><i style="background:#2b6fd6"></i> 🏴 Tartan Party</span>
       <span><i style="background:#ffd56b; box-shadow:0 0 0 2px #fff inset"></i> 🏠 Our Airbnb</span>
     </div>
     <div id="bigmap"></div>
@@ -516,7 +531,7 @@
     </div>
     <div class="grid">
 
-      <div class="card tartan" data-lat="25.8343" data-lng="-80.2002">
+      <div class="card tartan" data-tartan data-lat="25.8343" data-lng="-80.2002">
         <div class="ph" data-q="Domicile Miami nightclub Little Haiti"><span class="pill tartan">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Tartan Army HQ</span><div class="fallback">DM</div></div>
         <div class="body">
           <div class="name">Domicile<span class="dc relaxed">Kit night ✓</span></div>
@@ -661,6 +676,22 @@
     fanZone.bindPopup(ffPopup);
     markers.push(fanfestMarker);
 
+    // 🏴 Tartan Army Party @ Domicile — we've booked it, so flag it prominently
+    var taColor = '#2b6fd6';
+    var taIcon = L.divIcon({
+      className:'tartanpin-wrap',
+      html:'<div class="tartanpin"><span class="tartanpin-dot">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span><span class="tartanpin-label">Tartan Party</span></div>',
+      iconSize:[60,54], iconAnchor:[30,27], popupAnchor:[0,-25]
+    });
+    var tartanMarker = L.marker([25.8343,-80.2002], {icon:taIcon, zIndexOffset:950}).addTo(map);
+    tartanMarker.bindPopup('<div class="pop"><b>🏴󠁧󠁢󠁳󠁣󠁴󠁿 Tartan Army Party</b>'+
+      '<span class="popcat" style="color:'+taColor+'">Booked · Tue 23 Jun · 7pm</span>'+
+      '<div class="popaddr">Domicile · 6391 NW 2nd Ave</div>'+
+      '<a href="https://www.google.com/maps/search/?api=1&query='+
+      encodeURIComponent('Domicile 6391 NW 2nd Ave Miami FL')+
+      '" target="_blank" rel="noopener">Directions ↗</a></div>');
+    markers.push(tartanMarker);
+
     document.querySelectorAll('.card[data-lat]').forEach(function(card){
       var lat = parseFloat(card.getAttribute('data-lat'));
       var lng = parseFloat(card.getAttribute('data-lng'));
@@ -678,6 +709,8 @@
       var marker;
       if(card.hasAttribute('data-fanfest')){
         marker = fanfestMarker;          // reuse the big fan-zone marker for this card
+      } else if(card.hasAttribute('data-tartan')){
+        marker = tartanMarker;           // reuse the special Tartan Party marker
       } else {
         marker = L.circleMarker([lat,lng], {
           radius:9, color:'#fff', weight:2, fillColor:color, fillOpacity:.95
