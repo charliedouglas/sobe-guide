@@ -969,6 +969,14 @@
           document.getElementById('map').scrollIntoView({behavior:'smooth'});
           setTimeout(function(){ map.setView([lat,lng], 16, {animate:true}); marker.openPopup(); }, 450);
         });
+
+        // inject a Reviews row: Tripadvisor + Yelp searches for this venue
+        var rev = document.createElement('div');
+        rev.className = 'row';
+        rev.innerHTML = '<span class="k">Reviews</span><span class="v">'+
+          '<a class="maplink" href="https://www.tripadvisor.com/Search?q='+encodeURIComponent(name+' Miami')+'" target="_blank" rel="noopener">Tripadvisor ↗</a> · '+
+          '<a class="maplink" href="https://www.yelp.com/search?find_desc='+encodeURIComponent(name)+'&find_loc='+encodeURIComponent('Miami, FL')+'" target="_blank" rel="noopener">Yelp ↗</a></span>';
+        rows.appendChild(rev);
       }
     });
 
