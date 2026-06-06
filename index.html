@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Outfit:wght@300;400;500;600;700;800&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
   :root{
     --sun:#ff5e7e; --sun2:#ff9244; --aqua:#16e0c8; --aqua-deep:#0a8d9c;
@@ -110,7 +111,37 @@
   footer{text-align:center; padding:50px 20px 40px; font-size:13px; opacity:.7}
   .disc{max-width:640px; margin:0 auto 18px; font-size:12.5px; opacity:.8; line-height:1.6;
     background:var(--glass); border-radius:14px; padding:16px 20px; border:1px solid rgba(255,255,255,.1)}
-  @media(max-width:600px){ header{padding-top:48px} nav{border-radius:0} }
+  /* MAP */
+  #bigmap{height:460px; border-radius:20px; overflow:hidden; margin-top:4px;
+    border:1px solid rgba(255,255,255,.16); box-shadow:0 14px 50px rgba(10,5,30,.4); background:#13102b}
+  .maplegend{display:flex; gap:8px 16px; justify-content:center; flex-wrap:wrap;
+    margin:2px 0 18px; font-size:13px; font-weight:600}
+  .maplegend span{display:flex; align-items:center; gap:7px}
+  .maplegend i{width:13px; height:13px; border-radius:50%; display:inline-block; border:1.5px solid #fff}
+  .leaflet-container{font-family:'Outfit',sans-serif; background:#13102b}
+  .leaflet-popup-content-wrapper{background:#241a4d; color:var(--cream); border-radius:13px;
+    box-shadow:0 10px 34px rgba(0,0,0,.5)}
+  .leaflet-popup-tip{background:#241a4d}
+  .leaflet-popup-content{margin:12px 15px; line-height:1.45}
+  .pop b{font-size:15px; font-weight:700}
+  .pop .popcat{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; margin-left:7px}
+  .pop .popaddr{font-size:12px; color:var(--aqua); margin:4px 0 8px; font-weight:500}
+  .pop a{color:var(--gold); font-weight:700; text-decoration:none; font-size:13px}
+  .pop a:hover{text-decoration:underline}
+  .leaflet-bar a{background:#241a4d; color:var(--cream); border-color:rgba(255,255,255,.18)}
+  .leaflet-bar a:hover{background:#34276a}
+  .leaflet-control-attribution{background:rgba(20,16,43,.72)!important; color:#9c93c0!important}
+  .leaflet-control-attribution a{color:#c8c0e6!important}
+  /* per-card map links */
+  .maplink{color:var(--gold); text-decoration:none; font-weight:600; cursor:pointer}
+  .maplink:hover{text-decoration:underline}
+  /* Tartan Army feature card */
+  .card.tartan{border-color:rgba(255,213,107,.55); box-shadow:0 14px 46px rgba(255,213,107,.18)}
+  .pill.tartan{background:var(--gold); color:var(--ink)}
+  .evt{background:rgba(255,213,107,.12); border:1px solid rgba(255,213,107,.34); border-radius:12px;
+    padding:9px 12px; font-size:12.5px; margin:0 0 12px; line-height:1.45}
+  .evt b{color:var(--gold)}
+  @media(max-width:600px){ header{padding-top:48px} nav{border-radius:0} #bigmap{height:380px} }
 </style>
 </head>
 <body>
@@ -124,6 +155,7 @@
   </header>
 
   <nav>
+    <a href="#map">🗺️ Map</a>
     <a href="#footy">📺 Footy</a>
     <a href="#beach">🏖️ Beach</a>
     <a href="#sunset">🍸 Sunset</a>
@@ -137,13 +169,26 @@
     <div class="item"><span class="dot strict"></span> Strict door — trousers + shirt + leather shoes</div>
   </div>
 
+  <!-- MAP -->
+  <section id="map">
+    <div class="sec-head"><span class="emoji">🗺️</span><h2>The Map — Everywhere at a Glance</h2></div>
+    <div class="sec-sub">~ tap a pin for the lowdown · every card links back here ~</div>
+    <div class="maplegend">
+      <span><i style="background:#ff9244"></i> Footy</span>
+      <span><i style="background:#16e0c8"></i> Beach</span>
+      <span><i style="background:#ff5e7e"></i> Sunset</span>
+      <span><i style="background:#a4318f"></i> Late night</span>
+    </div>
+    <div id="bigmap"></div>
+  </section>
+
   <!-- FOOTY -->
   <section id="footy">
     <div class="sec-head"><span class="emoji">📺</span><h2>Daytime — Watch the Football</h2></div>
     <div class="sec-sub">~ where to roar the games on ~</div>
     <div class="grid">
 
-      <div class="card">
+      <div class="card" data-lat="25.7837" data-lng="-80.1323">
         <div class="ph" data-q="Mickey Burkes sports bar Miami Beach"><div class="fallback">MB</div></div>
         <div class="body">
           <div class="name">Mickey Burkes<span class="dc relaxed">Kit OK</span></div>
@@ -160,7 +205,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" data-lat="25.7873" data-lng="-80.1318">
         <div class="ph" data-q="Lost Weekend bar Miami Beach dive"><div class="fallback">LW</div></div>
         <div class="body">
           <div class="name">Lost Weekend<span class="dc relaxed">Kit OK</span></div>
@@ -177,7 +222,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" data-lat="25.7847" data-lng="-80.1300">
         <div class="ph" data-q="Finnegans Way Irish pub Ocean Drive Miami"><div class="fallback">FW</div></div>
         <div class="body">
           <div class="name">Finnegan's Way<span class="dc relaxed">Kit OK</span></div>
@@ -194,7 +239,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" data-lat="25.7686" data-lng="-80.1342">
         <div class="ph" data-q="South Pointe Tavern Miami Beach"><div class="fallback">SP</div></div>
         <div class="body">
           <div class="name">South Pointe Tavern<span class="dc relaxed">Kit OK</span></div>
@@ -220,7 +265,7 @@
     <div class="sec-sub">~ sand, sun loungers &amp; daytime drinks ~</div>
     <div class="grid">
 
-      <div class="card">
+      <div class="card" data-lat="25.7683" data-lng="-80.1308">
         <div class="ph" data-q="Nikki Beach Miami daybeds beach club"><div class="fallback">NB</div></div>
         <div class="body">
           <div class="name">Nikki Beach<span class="dc relaxed">Kit OK (day)</span></div>
@@ -237,7 +282,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" data-lat="25.7723" data-lng="-80.1297">
         <div class="ph" data-q="Savoy Hotel Beach Club Miami Beach pool"><div class="fallback">SV</div></div>
         <div class="body">
           <div class="name">Savoy Beach Club<span class="dc relaxed">Kit OK</span></div>
@@ -253,7 +298,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" data-lat="25.7906" data-lng="-80.1301">
         <div class="ph" data-q="Surfcomber Hotel pool Miami Beach High Tide"><div class="fallback">HT</div></div>
         <div class="body">
           <div class="name">High Tide / Solei<span class="dc relaxed">Kit OK</span></div>
@@ -269,7 +314,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" data-lat="25.7913" data-lng="-80.1299">
         <div class="ph" data-q="Backyard Miami restaurant pool open air"><div class="fallback">BY</div></div>
         <div class="body">
           <div class="name">Backyard Miami<span class="dc relaxed">Kit OK</span></div>
@@ -285,7 +330,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" data-lat="25.7771" data-lng="-80.1334">
         <div class="ph" data-q="Strawberry Moon Goodtime Hotel pool party Miami"><div class="fallback">SM</div></div>
         <div class="body">
           <div class="name">Strawberry Moon<span class="dc relaxed">Kit OK</span></div>
@@ -301,7 +346,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" data-lat="25.7856" data-lng="-80.1436">
         <div class="ph" data-q="Baia Beach Club Mondrian Miami bay sunset"><div class="fallback">BA</div></div>
         <div class="body">
           <div class="name">Baia Beach Club<span class="dc smart">Smart-ish</span></div>
@@ -326,7 +371,7 @@
     <div class="sec-sub">~ rooftops, cocktails &amp; golden hour ~</div>
     <div class="grid">
 
-      <div class="card">
+      <div class="card" data-lat="25.7976" data-lng="-80.1288">
         <div class="ph" data-q="Watr rooftop 1 Hotel South Beach ocean view"><div class="fallback">WR</div></div>
         <div class="body">
           <div class="name">Watr at 1 Rooftop<span class="dc smart">Smart-casual</span></div>
@@ -343,7 +388,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" data-lat="25.7913" data-lng="-80.1378">
         <div class="ph" data-q="Twisted Tonic rooftop bar Miami Beach Lincoln Road"><div class="fallback">TT</div></div>
         <div class="body">
           <div class="name">The Twisted Tonic<span class="dc smart">Smart-casual</span></div>
@@ -359,7 +404,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" data-lat="25.7906" data-lng="-80.1419">
         <div class="ph" data-q="Brothers Keeper cocktail bar Miami Beach"><div class="fallback">BK</div></div>
         <div class="body">
           <div class="name">Brother's Keeper<span class="dc relaxed">Relaxed</span></div>
@@ -375,7 +420,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" data-lat="25.7856" data-lng="-80.1324">
         <div class="ph" data-q="The Roof Esme Hotel Miami Beach rooftop DJ"><div class="fallback">ES</div></div>
         <div class="body">
           <div class="name">The Roof at Esme<span class="dc smart">Smart-casual</span></div>
@@ -391,7 +436,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" data-lat="25.7819" data-lng="-80.1304">
         <div class="ph" data-q="Delirio tiki bar Miami Beach speakeasy"><div class="fallback">DT</div></div>
         <div class="body">
           <div class="name">Delirio Tiki Bar<span class="dc relaxed">Relaxed</span></div>
@@ -419,7 +464,25 @@
     </div>
     <div class="grid">
 
-      <div class="card">
+      <div class="card tartan" data-lat="25.8343" data-lng="-80.2002">
+        <div class="ph" data-q="Domicile Miami nightclub Little Haiti"><span class="pill tartan">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Tartan Army HQ</span><div class="fallback">DM</div></div>
+        <div class="body">
+          <div class="name">Domicile<span class="dc relaxed">Kit night ✓</span></div>
+          <div class="addr">6391 NW 2nd Ave · Little Haiti</div>
+          <div class="evt">🏴󠁧󠁢󠁳󠁣󠁴󠁿 <b>Tartan Army Party</b> — GBX Anthems &amp; Tartan Specials · <b>Tue 23 June · 7pm</b> · the big pre-match night before Scotland v Brazil. Wear the kit, sing the anthems.</div>
+          <div class="vibe">Intimate dance club on the Wynwood/Little River edge — electronic &amp; house leaning, rising DJs, proper sound system, stripped-back warehouse feel. It's mainland Miami, not the Beach, so plan a taxi over.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline"><span class="yes">Scotland tops ✓</span> — it's a Tartan Army night, the kit is the whole point</span></div>
+            <div class="row"><span class="k">Event</span><span class="v">Ticketed (Eventbrite) · GBX anthems + tartan specials</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Advance ticket — grab it before it sells out</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$ · “tartan specials” on the night</span></div>
+            <div class="row"><span class="k">Vibe</span><span class="v">House/electronic club · GBX party energy</span></div>
+            <div class="row"><span class="k">Get there</span><span class="v">~15–20 min Uber from South Beach</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-lat="25.8183" data-lng="-80.1224">
         <div class="ph" data-q="LIV nightclub Miami Beach Fontainebleau"><div class="fallback">LIV</div></div>
         <div class="body">
           <div class="name">LIV<span class="dc strict">Strict door</span></div>
@@ -435,7 +498,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" data-lat="25.7858" data-lng="-80.1928">
         <div class="ph" data-q="E11even Miami nightclub"><div class="fallback">11</div></div>
         <div class="body">
           <div class="name">E11EVEN<span class="dc strict">Strict door</span></div>
@@ -451,7 +514,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" data-lat="25.7701" data-lng="-80.1326">
         <div class="ph" data-q="Story nightclub Miami Beach"><div class="fallback">ST</div></div>
         <div class="body">
           <div class="name">Story<span class="dc strict">Strict door</span></div>
@@ -506,6 +569,69 @@
     img.onerror = function(){ img.remove(); }; // leave fallback monogram
     ph.insertBefore(img, ph.firstChild);
   });
+</script>
+
+<!-- Interactive map: one pin per venue, colour-coded by section, plus per-card map links -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  (function(){
+    if(typeof L === 'undefined') return;                 // CDN blocked → page still works, just no map
+    var catColor = {footy:'#ff9244', beach:'#16e0c8', sunset:'#ff5e7e', late:'#a4318f'};
+    var catName  = {footy:'Footy', beach:'Beach', sunset:'Sunset', late:'Late night'};
+
+    var map = L.map('bigmap', {scrollWheelZoom:false}).setView([25.79,-80.14], 13);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      maxZoom:19, subdomains:'abcd',
+      attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>'
+    }).addTo(map);
+
+    var markers = [];
+    document.querySelectorAll('.card[data-lat]').forEach(function(card){
+      var lat = parseFloat(card.getAttribute('data-lat'));
+      var lng = parseFloat(card.getAttribute('data-lng'));
+      if(isNaN(lat) || isNaN(lng)) return;
+      var sec   = card.closest('section');
+      var cat   = sec ? sec.id : '';
+      var color = catColor[cat] || '#ffd56b';
+      var nameEl = card.querySelector('.name');
+      var name = nameEl ? nameEl.childNodes[0].textContent.trim() : 'Venue';
+      var addrEl = card.querySelector('.addr');
+      var addr = addrEl ? addrEl.textContent.trim() : '';
+      var gmaps = 'https://www.google.com/maps/search/?api=1&query=' +
+                  encodeURIComponent(name + ' ' + addr + ', Miami FL');
+
+      var marker = L.circleMarker([lat,lng], {
+        radius:9, color:'#fff', weight:2, fillColor:color, fillOpacity:.95
+      }).addTo(map);
+      marker.bindPopup(
+        '<div class="pop"><b>'+name+'</b>'+
+        (catName[cat] ? '<span class="popcat" style="color:'+color+'">'+catName[cat]+'</span>' : '')+
+        '<div class="popaddr">'+addr+'</div>'+
+        '<a href="'+gmaps+'" target="_blank" rel="noopener">Directions ↗</a></div>'
+      );
+      markers.push(marker);
+
+      // inject a Map row into the card (Directions + Locate-on-map)
+      var rows = card.querySelector('.rows');
+      if(rows){
+        var row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = '<span class="k">Map</span><span class="v">'+
+          '<a class="maplink" href="'+gmaps+'" target="_blank" rel="noopener">📍 Directions</a> · '+
+          '<a class="maplink locate">Locate ↑</a></span>';
+        rows.appendChild(row);
+        row.querySelector('.locate').addEventListener('click', function(e){
+          e.preventDefault();
+          document.getElementById('map').scrollIntoView({behavior:'smooth'});
+          setTimeout(function(){ map.setView([lat,lng], 16, {animate:true}); marker.openPopup(); }, 450);
+        });
+      }
+    });
+
+    if(markers.length){
+      map.fitBounds(L.featureGroup(markers).getBounds().pad(0.12));
+    }
+  })();
 </script>
 
 </body>
