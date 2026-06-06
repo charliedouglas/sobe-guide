@@ -146,6 +146,24 @@
     70%{box-shadow:0 0 0 18px rgba(255,213,107,0)}
     100%{box-shadow:0 0 0 0 rgba(255,213,107,0)}
   }
+  /* FIFA Fan Festival (big park) marker + area */
+  .fanpin-wrap{background:none!important; border:none!important}
+  .fanpin{display:flex; flex-direction:column; align-items:center}
+  .fanpin-dot{width:42px; height:42px; border-radius:50%; background:#2ee06a;
+    display:flex; align-items:center; justify-content:center; font-size:21px;
+    border:3px solid #fff; box-shadow:0 0 0 0 rgba(46,224,106,.7); animation:fanpulse 1.9s infinite}
+  .fanpin-label{margin-top:3px; font-size:9px; font-weight:800; letter-spacing:.5px; color:#06321a;
+    background:#2ee06a; padding:1px 7px; border-radius:10px; border:1px solid #fff;
+    white-space:nowrap; text-transform:uppercase}
+  @keyframes fanpulse{
+    0%{box-shadow:0 0 0 0 rgba(46,224,106,.7)}
+    70%{box-shadow:0 0 0 20px rgba(46,224,106,0)}
+    100%{box-shadow:0 0 0 0 rgba(46,224,106,0)}
+  }
+  .card.fanfest{border-color:rgba(46,224,106,.55); box-shadow:0 14px 46px rgba(46,224,106,.18)}
+  .pill.fanfest{background:#2ee06a; color:#06321a}
+  .evt.green{background:rgba(46,224,106,.12); border-color:rgba(46,224,106,.34)}
+  .evt.green b{color:#2ee06a}
   /* per-card map links */
   .maplink{color:var(--gold); text-decoration:none; font-weight:600; cursor:pointer}
   .maplink:hover{text-decoration:underline}
@@ -192,6 +210,7 @@
       <span><i style="background:#16e0c8"></i> Beach</span>
       <span><i style="background:#ff5e7e"></i> Sunset</span>
       <span><i style="background:#a4318f"></i> Late night</span>
+      <span><i style="background:#2ee06a"></i> ⚽ Fan Festival</span>
       <span><i style="background:#ffd56b; box-shadow:0 0 0 2px #fff inset"></i> 🏠 Our Airbnb</span>
     </div>
     <div id="bigmap"></div>
@@ -202,6 +221,24 @@
     <div class="sec-head"><span class="emoji">📺</span><h2>Daytime — Watch the Football</h2></div>
     <div class="sec-sub">~ where to roar the games on ~</div>
     <div class="grid">
+
+      <div class="card fanfest" data-fanfest data-lat="25.7753" data-lng="-80.1857">
+        <div class="ph" data-q="FIFA Fan Festival Bayfront Park Miami"><span class="pill fanfest">⚽ Official Fan Fest</span><div class="fallback">FF</div></div>
+        <div class="body">
+          <div class="name">FIFA Fan Festival<span class="dc relaxed">Kit on ✓</span></div>
+          <div class="addr">Bayfront Park · 301 Biscayne Blvd, Downtown</div>
+          <div class="evt green">⚽ <b>The official fan zone</b> — giant screens, stages, food &amp; every game live. <b>13 June – 5 July</b>, free entry. Where the Tartan Army masses gather to watch.</div>
+          <div class="vibe">A huge ~32-acre bayfront park turned into Miami's World Cup HQ: every match broadcast on big screens, live music + cultural stages, food &amp; drink stalls, family-friendly. The single biggest, most obvious place to watch with thousands of fans — marked as the big green zone on the map.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline"><span class="yes">Full kit ✓</span> · shorts ✓ · anything goes — it's a fan zone</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Free &amp; open to the public</span></div>
+            <div class="row"><span class="k">When</span><span class="v">13 June – 5 July · daily, plus every match day</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$ festival bars &amp; food stalls</span></div>
+            <div class="row"><span class="k">Vibe</span><span class="v">Massive crowds, screens, stages, atmosphere</span></div>
+            <div class="row"><span class="k">Get there</span><span class="v">~15 min Uber, or Brightline, from South Beach</span></div>
+          </div>
+        </div>
+      </div>
 
       <div class="card" data-lat="25.7837" data-lng="-80.1323">
         <div class="ph" data-q="Mickey Burkes sports bar Miami Beach"><div class="fallback">MB</div></div>
@@ -601,6 +638,29 @@
     }).addTo(map);
 
     var markers = [];
+
+    // ⚽ FIFA Fan Festival — a whole park, so draw it as a big green AREA (unmissable)
+    var ffColor = '#2ee06a';
+    var fanZone = L.polygon([
+      [25.77800,-80.18820],[25.77770,-80.18320],[25.77290,-80.18270],
+      [25.77190,-80.18560],[25.77360,-80.18840]
+    ], {color:ffColor, weight:2, fillColor:ffColor, fillOpacity:.28}).addTo(map);
+    var ffIcon = L.divIcon({
+      className:'fanpin-wrap',
+      html:'<div class="fanpin"><span class="fanpin-dot">⚽</span><span class="fanpin-label">Fan Fest</span></div>',
+      iconSize:[52,54], iconAnchor:[26,27], popupAnchor:[0,-25]
+    });
+    var fanfestMarker = L.marker([25.7753,-80.1857], {icon:ffIcon, zIndexOffset:900}).addTo(map);
+    var ffPopup = '<div class="pop"><b>⚽ FIFA Fan Festival</b>'+
+      '<span class="popcat" style="color:'+ffColor+'">Official fan zone</span>'+
+      '<div class="popaddr">Bayfront Park · 301 Biscayne Blvd</div>'+
+      '<a href="https://www.google.com/maps/search/?api=1&query='+
+      encodeURIComponent('Bayfront Park 301 Biscayne Blvd Miami FL')+
+      '" target="_blank" rel="noopener">Directions ↗</a></div>';
+    fanfestMarker.bindPopup(ffPopup);
+    fanZone.bindPopup(ffPopup);
+    markers.push(fanfestMarker);
+
     document.querySelectorAll('.card[data-lat]').forEach(function(card){
       var lat = parseFloat(card.getAttribute('data-lat'));
       var lng = parseFloat(card.getAttribute('data-lng'));
@@ -615,16 +675,21 @@
       var gmaps = 'https://www.google.com/maps/search/?api=1&query=' +
                   encodeURIComponent(name + ' ' + addr + ', Miami FL');
 
-      var marker = L.circleMarker([lat,lng], {
-        radius:9, color:'#fff', weight:2, fillColor:color, fillOpacity:.95
-      }).addTo(map);
-      marker.bindPopup(
-        '<div class="pop"><b>'+name+'</b>'+
-        (catName[cat] ? '<span class="popcat" style="color:'+color+'">'+catName[cat]+'</span>' : '')+
-        '<div class="popaddr">'+addr+'</div>'+
-        '<a href="'+gmaps+'" target="_blank" rel="noopener">Directions ↗</a></div>'
-      );
-      markers.push(marker);
+      var marker;
+      if(card.hasAttribute('data-fanfest')){
+        marker = fanfestMarker;          // reuse the big fan-zone marker for this card
+      } else {
+        marker = L.circleMarker([lat,lng], {
+          radius:9, color:'#fff', weight:2, fillColor:color, fillOpacity:.95
+        }).addTo(map);
+        marker.bindPopup(
+          '<div class="pop"><b>'+name+'</b>'+
+          (catName[cat] ? '<span class="popcat" style="color:'+color+'">'+catName[cat]+'</span>' : '')+
+          '<div class="popaddr">'+addr+'</div>'+
+          '<a href="'+gmaps+'" target="_blank" rel="noopener">Directions ↗</a></div>'
+        );
+        markers.push(marker);
+      }
 
       // inject a Map row into the card (Directions + Locate-on-map)
       var rows = card.querySelector('.rows');
