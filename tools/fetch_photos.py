@@ -28,6 +28,21 @@ import sys
 import urllib.parse
 import urllib.request
 
+
+def load_dotenv(root: pathlib.Path):
+    env = root / ".env"
+    if not env.exists():
+        return
+    for line in env.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        k, _, v = line.partition("=")
+        k = k.strip()
+        v = v.strip().strip('"').strip("'")
+        if k and k not in os.environ:
+            os.environ[k] = v
+
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 HTML = ROOT / "index.html"
 IMGDIR = ROOT / "images"
@@ -66,16 +81,23 @@ def serpapi_images(query: str, key: str):
     return data.get("images_results", [])
 
 
-def download(url: str, dest: pathlib.Path) -> bool:
+EXT_MAP = {"image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp", "image/gif": ".gif"}
+
+
+def download(url: str, dest: pathlib.Path):
     req = urllib.request.Request(url, headers={"User-Agent": UA})
     with urllib.request.urlopen(req, timeout=40) as r:
-        if "image" not in r.headers.get("Content-Type", ""):
+        ct = r.headers.get("Content-Type", "").split(";")[0].strip()
+        if "image" not in ct:
             return False
         blob = r.read()
-    if len(blob) < 1500:  # skip 1x1 pixels / error pages
+    if len(blob) < 1500:
         return False
+    ext = EXT_MAP.get(ct, ".jpg")
+    if dest.suffix != ext:
+        dest = dest.with_suffix(ext)
     dest.write_bytes(blob)
-    return True
+    return dest
 
 
 def inject(html: str, query: str, files) -> str:
@@ -86,11 +108,19 @@ def inject(html: str, query: str, files) -> str:
     return re.sub(pattern, lambda m: repl, html, count=1)
 
 
+def existing_images(slug: str) -> list:
+    """Return already-downloaded image paths for a slug (any extension)."""
+    found = sorted(IMGDIR.glob("%s-*" % slug))
+    return ["images/" + p.name for p in found]
+
+
 def main():
+    load_dotenv(ROOT)
     ap = argparse.ArgumentParser(description="Fetch venue photos via SerpApi.")
     ap.add_argument("--key", default=os.environ.get("SERPAPI_KEY"),
                     help="SerpApi key (or set SERPAPI_KEY env var)")
     ap.add_argument("--per", type=int, default=3, help="images per venue (default 3)")
+    ap.add_argument("--force", action="store_true", help="re-fetch even if images exist")
     args = ap.parse_args()
     if not args.key:
         sys.exit("No API key. Use --key or set SERPAPI_KEY.")
@@ -102,6 +132,14 @@ def main():
     manifest = {}
 
     for c in cards:
+        if not args.force:
+            cached = existing_images(c["slug"])
+            if len(cached) >= args.per:
+                print("\n[%s]  skipped (cached: %d images)" % (c["name"], len(cached)))
+                manifest[c["slug"]] = cached
+                html = inject(html, c["query"], cached)
+                continue
+
         print("\n[%s]  q=%r" % (c["name"], c["query"]))
         try:
             results = serpapi_images(c["query"], args.key)
@@ -118,9 +156,10 @@ def main():
                     continue
                 dest = IMGDIR / ("%s-%d.jpg" % (c["slug"], len(saved) + 1))
                 try:
-                    if download(u, dest):
-                        saved.append("images/" + dest.name)
-                        print("  + %s  (%s)" % (dest.name, key))
+                    saved_path = download(u, dest)
+                    if saved_path:
+                        saved.append("images/" + saved_path.name)
+                        print("  + %s  (%s)" % (saved_path.name, key))
                         break
                 except Exception:
                     continue
