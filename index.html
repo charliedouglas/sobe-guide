@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>South Beach · World Cup '26 Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Monoton&family=Outfit:wght@300;400;500;600;700;800&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sun:#ff5e7e; --sun2:#ff9244; --aqua:#16e0c8; --aqua-deep:#0a8d9c;
+    --ink:#1a1140; --ink2:#2c1d5e; --cream:#fff4ec; --gold:#ffd56b;
+    --glass:rgba(255,255,255,.08);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Outfit',sans-serif; color:var(--cream); line-height:1.5;
+    background:
+      radial-gradient(120% 80% at 50% -10%, #ff9244 0%, #ff5e7e 22%, #a4318f 48%, #2c1d5e 74%, #1a1140 100%) fixed;
+    min-height:100vh; overflow-x:hidden;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.4;
+    background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 3px);
+  }
+  .wrap{position:relative; z-index:1; max-width:1080px; margin:0 auto; padding:0 20px}
+
+  /* HERO */
+  header{text-align:center; padding:70px 20px 30px; position:relative}
+  .palm{font-size:13px; letter-spacing:6px; text-transform:uppercase; color:var(--gold); font-weight:600}
+  h1{
+    font-family:'Monoton',cursive; font-weight:400; line-height:.95;
+    font-size:clamp(42px,11vw,104px); margin:14px 0 6px;
+    background:linear-gradient(180deg,#fff 0%,var(--gold) 55%,var(--sun) 100%);
+    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    text-shadow:0 0 40px rgba(255,213,107,.35);
+  }
+  .tag{font-size:clamp(15px,2.5vw,20px); font-weight:300; color:var(--cream); opacity:.92}
+  .tag b{color:var(--aqua); font-weight:600}
+  .match{
+    display:inline-block; margin-top:22px; padding:10px 22px; border-radius:40px;
+    background:var(--glass); border:1px solid rgba(255,255,255,.22); backdrop-filter:blur(8px);
+    font-size:14px; font-weight:500;
+  }
+  .match b{color:var(--gold)}
+
+  /* NAV */
+  nav{position:sticky; top:0; z-index:20; display:flex; gap:8px; justify-content:center; flex-wrap:wrap;
+    padding:14px 10px; margin:28px 0 10px;
+    background:rgba(26,17,64,.55); backdrop-filter:blur(14px); border-radius:0;
+    border-top:1px solid rgba(255,255,255,.12); border-bottom:1px solid rgba(255,255,255,.12)}
+  nav a{color:var(--cream); text-decoration:none; font-size:13px; font-weight:600; letter-spacing:.5px;
+    text-transform:uppercase; padding:8px 14px; border-radius:30px; transition:.25s; white-space:nowrap}
+  nav a:hover{background:var(--sun); color:#fff; transform:translateY(-2px)}
+
+  /* SECTION */
+  section{padding:46px 0 10px}
+  .sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:8px; flex-wrap:wrap}
+  .sec-head h2{font-size:clamp(26px,5vw,40px); font-weight:800; letter-spacing:-1px}
+  .sec-head .emoji{font-size:30px}
+  .sec-sub{font-family:'Caveat',cursive; font-size:22px; color:var(--gold); margin-bottom:26px}
+
+  /* CARDS */
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:22px}
+  .card{
+    background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.13); border-radius:20px;
+    overflow:hidden; backdrop-filter:blur(10px); transition:.3s; display:flex; flex-direction:column;
+    box-shadow:0 10px 40px rgba(10,5,30,.3);
+  }
+  .card:hover{transform:translateY(-6px); border-color:var(--aqua); box-shadow:0 18px 50px rgba(22,224,200,.18)}
+  .ph{height:158px; position:relative; overflow:hidden;
+    background:linear-gradient(135deg,var(--aqua-deep),var(--ink2))}
+  .ph img{width:100%; height:100%; object-fit:cover; display:block}
+  .ph .fallback{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-family:'Monoton',cursive; font-size:46px; color:rgba(255,255,255,.25)}
+  .pill{position:absolute; top:12px; left:12px; z-index:2; font-size:11px; font-weight:700;
+    text-transform:uppercase; letter-spacing:.5px; padding:5px 11px; border-radius:30px;
+    background:var(--sun); color:#fff; box-shadow:0 4px 12px rgba(0,0,0,.25)}
+  /* dress-code badges (sit inline next to the name) */
+  .dc{display:inline-block; margin-left:6px; font-size:10.5px; font-weight:700; text-transform:uppercase;
+    letter-spacing:.5px; padding:4px 10px; border-radius:30px; vertical-align:middle}
+  .dc.relaxed{background:var(--aqua); color:var(--ink)}
+  .dc.smart{background:var(--gold); color:var(--ink)}
+  .dc.strict{background:#ff3b5c; color:#fff}
+  .legend{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:18px 0 4px}
+  .legend .item{display:flex; align-items:center; gap:7px; font-size:12.5px; font-weight:500;
+    background:var(--glass); border:1px solid rgba(255,255,255,.14); padding:7px 14px; border-radius:30px}
+  .legend .dot{width:11px; height:11px; border-radius:50%}
+  .dot.relaxed{background:var(--aqua)} .dot.smart{background:var(--gold)} .dot.strict{background:#ff3b5c}
+  /* dress-code detail line inside the card rows */
+  .dcline{font-size:12.5px; line-height:1.5; margin-top:2px}
+  .dcline .yes{color:var(--aqua); font-weight:600}
+  .dcline .no{color:#ff8fa3; font-weight:600}
+  .body{padding:18px 18px 20px; flex:1; display:flex; flex-direction:column}
+  .name{font-size:20px; font-weight:700; line-height:1.15}
+  .addr{font-size:12.5px; color:var(--aqua); margin:3px 0 12px; font-weight:500}
+  .vibe{font-size:14px; opacity:.92; margin-bottom:14px}
+  .rows{margin-top:auto; display:flex; flex-direction:column; gap:6px}
+  .row{display:flex; gap:9px; font-size:13px; align-items:flex-start}
+  .row .k{flex:0 0 70px; color:var(--gold); font-weight:600; text-transform:uppercase; font-size:11px; letter-spacing:.5px; padding-top:1px}
+  .row .v{flex:1}
+  .stars{color:var(--gold); font-weight:700}
+
+  .note{background:rgba(255,213,107,.1); border:1px solid rgba(255,213,107,.3); border-radius:14px;
+    padding:16px 18px; font-size:14px; margin:8px 0 0}
+  .note b{color:var(--gold)}
+
+  footer{text-align:center; padding:50px 20px 40px; font-size:13px; opacity:.7}
+  .disc{max-width:640px; margin:0 auto 18px; font-size:12.5px; opacity:.8; line-height:1.6;
+    background:var(--glass); border-radius:14px; padding:16px 20px; border:1px solid rgba(255,255,255,.1)}
+  @media(max-width:600px){ header{padding-top:48px} nav{border-radius:0} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="palm">🌴 Miami · Florida · Summer '26 🌴</div>
+    <h1>South Beach</h1>
+    <div class="tag">The <b>World Cup</b> bar &amp; beach guide — daytime footy, beach clubs, sunset cocktails &amp; late nights</div>
+    <div class="match">🏴󠁧󠁢󠁳󠁣󠁴󠁿 <b>Scotland v Brazil</b> · Wed 24 June · 6pm · Miami Stadium ⚽</div>
+  </header>
+
+  <nav>
+    <a href="#footy">📺 Footy</a>
+    <a href="#beach">🏖️ Beach</a>
+    <a href="#sunset">🍸 Sunset</a>
+    <a href="#late">🌃 Late Night</a>
+    <a href="#tips">💡 Tips</a>
+  </nav>
+
+  <div class="legend">
+    <div class="item"><span class="dot relaxed"></span> Kit OK — wear anything</div>
+    <div class="item"><span class="dot smart"></span> Smart-casual — drop the kit</div>
+    <div class="item"><span class="dot strict"></span> Strict door — trousers + shirt + leather shoes</div>
+  </div>
+
+  <!-- FOOTY -->
+  <section id="footy">
+    <div class="sec-head"><span class="emoji">📺</span><h2>Daytime — Watch the Football</h2></div>
+    <div class="sec-sub">~ where to roar the games on ~</div>
+    <div class="grid">
+
+      <div class="card">
+        <div class="ph" data-q="Mickey Burkes sports bar Miami Beach"><div class="fallback">MB</div></div>
+        <div class="body">
+          <div class="name">Mickey Burkes<span class="dc relaxed">Kit OK</span></div>
+          <div class="addr">1265 Washington Ave</div>
+          <div class="vibe">The standout proper sports bar — lively, well-decked, and staff are known to hunt down whatever channel/subscription your match needs. Best crowd energy for Scotland v Brazil.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline"><span class="yes">Scotland tops ✓</span> · shorts ✓ · tees ✓ — wear anything</span></div>
+            <div class="row"><span class="k">Rating</span><span class="v stars">4.8 ★</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Free</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">£/$ mid · pints ~$8–10, cocktails ~$14–16</span></div>
+            <div class="row"><span class="k">Food</span><span class="v">Burgers, wings, poutine ~$15–22</span></div>
+            <div class="row"><span class="k">Open</span><span class="v">11am wknds — good for early kick-offs</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ph" data-q="Lost Weekend bar Miami Beach dive"><div class="fallback">LW</div></div>
+        <div class="body">
+          <div class="name">Lost Weekend<span class="dc relaxed">Kit OK</span></div>
+          <div class="addr">218 Española Way</div>
+          <div class="vibe">Proper dive — pool tables, arcade machines, cheap pitchers, every game on. Unpretentious and fun. Skews to a US-sports crowd but they'll show anything.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline"><span class="yes">Scotland tops ✓</span> · shorts ✓ · tees ✓ — go full kit</span></div>
+            <div class="row"><span class="k">Rating</span><span class="v stars">4.3 ★</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Free</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$ cheap · pitchers ~$12, the value pick</span></div>
+            <div class="row"><span class="k">Food</span><span class="v">Burgers, nachos ~$12–16</span></div>
+            <div class="row"><span class="k">Open</span><span class="v">Noon Sun, 4pm weekdays</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ph" data-q="Finnegans Way Irish pub Ocean Drive Miami"><div class="fallback">FW</div></div>
+        <div class="body">
+          <div class="name">Finnegan's Way<span class="dc relaxed">Kit OK</span></div>
+          <div class="addr">1344 Ocean Drive</div>
+          <div class="vibe">Irish-style pub right on the Ocean Drive strip — go for the location and buzz, not the Guinness (reviews flag flat beer + auto 18% gratuity). Prime people-watching.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline"><span class="yes">Scotland tops ✓</span> · shorts ✓ · tees ✓</span></div>
+            <div class="row"><span class="k">Rating</span><span class="v stars">4.1 ★</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Free</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$ Ocean Dr prices · +18% auto gratuity</span></div>
+            <div class="row"><span class="k">Food</span><span class="v">Pub grub + breakfast ~$14–20</span></div>
+            <div class="row"><span class="k">Open</span><span class="v">9–10am daily</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ph" data-q="South Pointe Tavern Miami Beach"><div class="fallback">SP</div></div>
+        <div class="body">
+          <div class="name">South Pointe Tavern<span class="dc relaxed">Kit OK</span></div>
+          <div class="addr">40 South Pointe Drive</div>
+          <div class="vibe">Relaxed South-of-Fifth spot with loads of TVs and a quieter feel. Strong cocktails and Cuban sandwich; stick to drinks over the burgers.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline"><span class="yes">Scotland tops ✓</span> · shorts ✓ · tees ✓</span></div>
+            <div class="row"><span class="k">Rating</span><span class="v stars">4.5 ★</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Free</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$ · solid cocktails ~$14–16</span></div>
+            <div class="row"><span class="k">Food</span><span class="v">Cuban, guac, bar bites ~$14–20</span></div>
+            <div class="row"><span class="k">Open</span><span class="v">9am daily</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BEACH -->
+  <section id="beach">
+    <div class="sec-head"><span class="emoji">🏖️</span><h2>Beach Bars &amp; Day Clubs</h2></div>
+    <div class="sec-sub">~ sand, sun loungers &amp; daytime drinks ~</div>
+    <div class="grid">
+
+      <div class="card">
+        <div class="ph" data-q="Nikki Beach Miami daybeds beach club"><div class="fallback">NB</div></div>
+        <div class="body">
+          <div class="name">Nikki Beach<span class="dc relaxed">Kit OK (day)</span></div>
+          <div class="addr">1 Ocean Drive</div>
+          <div class="vibe">The postcard South Beach club — white daybeds on the sand, palms, DJ, ocean steps away. Do it once with eyes open: it's a scene, food's just-okay, drinks can feel weak. You pay for the vibe.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline">Kits fine but you’ll stand out among swimwear/linen · shorts ✓ · swap sliders for the eve</span></div>
+            <div class="row"><span class="k">Rating</span><span class="v stars">4.2 ★</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Tables free; daybeds rentable (high min. spend)</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$$ cocktails ~$20–26</span></div>
+            <div class="row"><span class="k">Food</span><span class="v">Cuban ~$22; sharing plates higher</span></div>
+            <div class="row"><span class="k">Vibe</span><span class="v">House/lounge DJ · busy + hectic on weekends</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ph" data-q="Savoy Hotel Beach Club Miami Beach pool"><div class="fallback">SV</div></div>
+        <div class="body">
+          <div class="name">Savoy Beach Club<span class="dc relaxed">Kit OK</span></div>
+          <div class="addr">425 Ocean Drive</div>
+          <div class="vibe">Tucked-away, relaxed beachfront with two pools (one heated), beach chairs + towels. Service consistently praised. The chilled, better-value alternative to Nikki.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline"><span class="yes">Tops ✓</span> · swim shorts ✓ · beachwear</span></div>
+            <div class="row"><span class="k">Rating</span><span class="v stars">4.5 ★</span></div>
+            <div class="row"><span class="k">Day pass</span><span class="v">~$50 (or ~$69 min-spend promo)</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$ poolside service</span></div>
+            <div class="row"><span class="k">Vibe</span><span class="v">Tropical, cosy, low-key</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ph" data-q="Surfcomber Hotel pool Miami Beach High Tide"><div class="fallback">HT</div></div>
+        <div class="body">
+          <div class="name">High Tide / Solei<span class="dc relaxed">Kit OK</span></div>
+          <div class="addr">Surfcomber Hotel · 1717 Collins Ave</div>
+          <div class="vibe">Open to non-guests via resort day pass. Poolside with beach access, upbeat-but-chilled DJ, genuinely good food (watermelon sushi, guac). Relaxed afternoon winner.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline"><span class="yes">Tops ✓</span> · swim shorts ✓ · poolwear</span></div>
+            <div class="row"><span class="k">Rating</span><span class="v stars">4.3 ★</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Resort day pass (via hotel)</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$ signature cocktails</span></div>
+            <div class="row"><span class="k">Vibe</span><span class="v">Chill house, not obtrusive</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ph" data-q="Backyard Miami restaurant pool open air"><div class="fallback">BY</div></div>
+        <div class="body">
+          <div class="name">Backyard Miami<span class="dc relaxed">Kit OK</span></div>
+          <div class="addr">1741 Collins Ave</div>
+          <div class="vibe">Funky open-air spot with a pool and garden — more garden-pool than sand but lovely and chilled. Service repeatedly singled out as excellent. Great for a long lazy daytime.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline"><span class="yes">Tops ✓</span> · shorts ✓ · tees ✓</span></div>
+            <div class="row"><span class="k">Rating</span><span class="v stars">4.8 ★</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Free (restaurant)</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$ great margaritas</span></div>
+            <div class="row"><span class="k">Food</span><span class="v">Breakfast–dinner, club sandwich ~$18</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ph" data-q="Strawberry Moon Goodtime Hotel pool party Miami"><div class="fallback">SM</div></div>
+        <div class="body">
+          <div class="name">Strawberry Moon<span class="dc relaxed">Kit OK</span></div>
+          <div class="addr">Goodtime Hotel · 601 Washington Ave</div>
+          <div class="vibe">Big elevated pool-party scene — two pools, cabanas, DJ. Energy depends on the day: lively at weekends, can be flat midweek. More party than chill.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline"><span class="yes">Tops ✓</span> · swim shorts ✓ · poolwear</span></div>
+            <div class="row"><span class="k">Rating</span><span class="v stars">4.1 ★</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">~$25 day ticket (non-guests)</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$ poolside</span></div>
+            <div class="row"><span class="k">Vibe</span><span class="v">DJ pool party, cabana scene</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ph" data-q="Baia Beach Club Mondrian Miami bay sunset"><div class="fallback">BA</div></div>
+        <div class="body">
+          <div class="name">Baia Beach Club<span class="dc smart">Smart-ish</span></div>
+          <div class="addr">Mondrian · 1100 West Ave</div>
+          <div class="vibe">On the <i>bay</i> side (west), so you get the Miami skyline + sunset rather than open ocean. Gorgeous setting; food/drink/service reviews are mixed. Go for the sunset view.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline">Smarten up for sunset · tailored shorts ✓ · plain tee/shirt · lose the kit</span></div>
+            <div class="row"><span class="k">Rating</span><span class="v stars">4.2 ★</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Beach club / day passes</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$$ sunset cocktails</span></div>
+            <div class="row"><span class="k">Vibe</span><span class="v">Skyline sunset, photo spot</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SUNSET -->
+  <section id="sunset">
+    <div class="sec-head"><span class="emoji">🍸</span><h2>Evening — Drinks &amp; Vibes</h2></div>
+    <div class="sec-sub">~ rooftops, cocktails &amp; golden hour ~</div>
+    <div class="grid">
+
+      <div class="card">
+        <div class="ph" data-q="Watr rooftop 1 Hotel South Beach ocean view"><div class="fallback">WR</div></div>
+        <div class="body">
+          <div class="name">Watr at 1 Rooftop<span class="dc smart">Smart-casual</span></div>
+          <div class="addr">1 Hotel · 2341 Collins Ave</div>
+          <div class="vibe">The polished pick — stylish crowd, stunning ocean views, masterful (pricey) cocktails, Japanese small plates. Smart-casual; GATs absolutely fine. Dress up a notch.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline">Kit ⚠️ (smartest spot — skip it) · smart shorts ✓ · collared shirt safest</span></div>
+            <div class="row"><span class="k">Rating</span><span class="v stars">4.4 ★</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Free (reservation advised)</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$$ cocktails ~$22–26</span></div>
+            <div class="row"><span class="k">Food</span><span class="v">Truffle fries, sushi, sharing plates</span></div>
+            <div class="row"><span class="k">Vibe</span><span class="v">DJ, sunset rooftop, chic</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ph" data-q="Twisted Tonic rooftop bar Miami Beach Lincoln Road"><div class="fallback">TT</div></div>
+        <div class="body">
+          <div class="name">The Twisted Tonic<span class="dc smart">Smart-casual</span></div>
+          <div class="addr">723 Lincoln Lane N</div>
+          <div class="vibe">Hidden rooftop near Lincoln Road — breathtaking views, reasonably-priced cocktails, quieter so you can actually talk. A proper find. DJ some nights.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline">Plain tee ✓ · smart shorts ✓ · kit ⚠️ borderline — go plain</span></div>
+            <div class="row"><span class="k">Rating</span><span class="v stars">4.9 ★</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Free</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$ good-value cocktails</span></div>
+            <div class="row"><span class="k">Vibe</span><span class="v">Chill rooftop, DJ, skyline</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ph" data-q="Brothers Keeper cocktail bar Miami Beach"><div class="fallback">BK</div></div>
+        <div class="body">
+          <div class="name">Brother's Keeper<span class="dc relaxed">Relaxed</span></div>
+          <div class="addr">1710 Alton Road</div>
+          <div class="vibe">Serious cocktail program in a dive-bar-meets-disco-ball setting (fish tanks included). Great happy hour, very local, no pretension. Martini comes with a croissant.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline"><span class="yes">Casual ✓</span> · tee ✓ · shorts ✓ · they won’t fuss</span></div>
+            <div class="row"><span class="k">Rating</span><span class="v stars">4.7 ★</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Free</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$ craft cocktails · strong happy hour</span></div>
+            <div class="row"><span class="k">Food</span><span class="v">Steak frites, bar bites</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ph" data-q="The Roof Esme Hotel Miami Beach rooftop DJ"><div class="fallback">ES</div></div>
+        <div class="body">
+          <div class="name">The Roof at Esme<span class="dc smart">Smart-casual</span></div>
+          <div class="addr">1438 Washington Ave</div>
+          <div class="vibe">Intimate rooftop with a DJ, strong bartenders and great vibe — more personal than the megaspots. Sunday Soul &amp; Jazz nights. Closes 10pm, so an early-evening start.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline">Smart-casual · tee/shirt ✓ · smart shorts ✓ · plain over kit</span></div>
+            <div class="row"><span class="k">Rating</span><span class="v stars">4.6 ★</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Free</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$ well-made cocktails</span></div>
+            <div class="row"><span class="k">Vibe</span><span class="v">DJ + live jazz nights, intimate</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ph" data-q="Delirio tiki bar Miami Beach speakeasy"><div class="fallback">DT</div></div>
+        <div class="body">
+          <div class="name">Delirio Tiki Bar<span class="dc relaxed">Relaxed</span></div>
+          <div class="addr">1120 Collins Ave</div>
+          <div class="vibe">"World's smallest tiki bar" — a hidden speakeasy-feel spot opening onto a pool/garden. Award-winning cocktails, brilliant bartenders, great happy hour. Fun novelty stop.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline"><span class="yes">Casual ✓</span> · tee ✓ · shorts ✓</span></div>
+            <div class="row"><span class="k">Rating</span><span class="v stars">4.9 ★</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Free</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$ tiki cocktails · happy hour</span></div>
+            <div class="row"><span class="k">Vibe</span><span class="v">Hidden, tropical, intimate</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- LATE -->
+  <section id="late">
+    <div class="sec-head"><span class="emoji">🌃</span><h2>Late Night — The Big Clubs</h2></div>
+    <div class="sec-sub">~ trousers, proper shirts &amp; leather shoes ~</div>
+    <div class="note" style="margin-bottom:24px">
+      <b>⚠️ Door codes:</b> LIV, E11EVEN &amp; Story have strict doors — <b>no football shirts, no shorts, no vests, no trainers, no flip-flops.</b> Dark trousers/denim, a fitted shirt, sleek leather shoes. Expect cover charges and big bottle-service minimums; guest list / table booking ahead saves grief.
+    </div>
+    <div class="grid">
+
+      <div class="card">
+        <div class="ph" data-q="LIV nightclub Miami Beach Fontainebleau"><div class="fallback">LIV</div></div>
+        <div class="body">
+          <div class="name">LIV<span class="dc strict">Strict door</span></div>
+          <div class="addr">Fontainebleau · 4441 Collins Ave</div>
+          <div class="vibe">The legendary megaclub — huge production, A-list DJs and hip-hop/EDM headliners. The one everyone's heard of. Book a table or get on a list well ahead.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline"><span class="no">NO football shirts</span> · <span class="no">NO shorts</span> · trousers/dark denim + collared shirt + leather shoes</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Cover ~$40–100+ · tables $$$$</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$$$ — bottle minimums steep</span></div>
+            <div class="row"><span class="k">Vibe</span><span class="v">Big-name DJs, hip-hop/EDM, spectacle</span></div>
+            <div class="row"><span class="k">Check</span><span class="v">Line-ups announced weekly — check nearer time</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ph" data-q="E11even Miami nightclub"><div class="fallback">11</div></div>
+        <div class="body">
+          <div class="name">E11EVEN<span class="dc strict">Strict door</span></div>
+          <div class="addr">29 NE 11th St (Downtown, short ride over)</div>
+          <div class="vibe">24/7 ultraclub blending nightclub + cabaret/performance. Huge international DJs, never really closes. Technically Downtown not SoBe but the iconic late-late option.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline"><span class="no">NO kit</span> · <span class="no">NO shorts</span> · trousers + proper shirt + leather shoes</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Cover ~$50–100+ · tables $$$$</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$$$ premium</span></div>
+            <div class="row"><span class="k">Vibe</span><span class="v">24hr, DJs + performers, high-energy</span></div>
+            <div class="row"><span class="k">Check</span><span class="v">Line-ups weekly</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ph" data-q="Story nightclub Miami Beach"><div class="fallback">ST</div></div>
+        <div class="body">
+          <div class="name">Story<span class="dc strict">Strict door</span></div>
+          <div class="addr">136 Collins Ave</div>
+          <div class="vibe">South Beach's heavyweight EDM/open-format club, big light shows and headline DJs. The SoBe counterpart to LIV. Late start, peaks 1–3am.</div>
+          <div class="rows">
+            <div class="row"><span class="k">Dress</span><span class="v dcline"><span class="no">NO kit</span> · <span class="no">NO shorts</span> · trousers + shirt + leather shoes</span></div>
+            <div class="row"><span class="k">Entry</span><span class="v">Cover ~$40–80+ · tables $$$$</span></div>
+            <div class="row"><span class="k">Drinks</span><span class="v">$$$$ bottle service focus</span></div>
+            <div class="row"><span class="k">Vibe</span><span class="v">EDM/open format, production-heavy</span></div>
+            <div class="row"><span class="k">Check</span><span class="v">Line-ups weekly</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TIPS -->
+  <section id="tips">
+    <div class="sec-head"><span class="emoji">💡</span><h2>Know Before You Go</h2></div>
+    <div class="sec-sub">~ the useful bits ~</div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="note">👕 <b>The dress-code cheat sheet:</b> <span style="color:var(--aqua);font-weight:600">Days &amp; beach</span> = wear anything, kits welcome. <span style="color:var(--gold);font-weight:600">Sunset rooftops</span> = smart-casual, drop the kit (plain tee or shirt). <span style="color:#ff8fa3;font-weight:600">Big clubs (LIV / E11EVEN / Story)</span> = trousers or dark denim + collared shirt + leather shoes. <b>No football shirts, no shorts, no trainers</b> — this door is strict and they will turn you away.</div>
+      <div class="note">🌡️ <b>The heat is the real opponent:</b> June in SoBe is hot AND brutally humid even at midnight. Linen/cotton outside; the clubs crank AC hard so you'll swing from sweating to shivering. Lean into colour — Miami rewards a bit of flash.</div>
+      <div class="note">⚽ <b>World Cup crush:</b> beachfront spots (esp. Nikki) get rammed on match days. Backyard and High Tide stay more civilised. Rep Scotland at the fan zones / Ocean Drive sports bars by day — but change before the evening clubs (shirts won't get you in).</div>
+      <div class="note">🚕 <b>Getting about:</b> most daytime + sunset spots are walkable along Collins/Ocean/Washington. E11EVEN is Downtown — grab a quick Uber over.</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="disc">
+      <b>A note on prices &amp; DJs:</b> entry, bottle and drink prices in South Beach shift constantly and most venues don't publish them — figures marked "~" are typical ranges to budget around, not quotes. Day-pass and ticket prices are from recent listings and may change. Club DJ line-ups are announced week-to-week, so check each venue's site/socials closer to your trip for who's actually playing.
+    </div>
+    🌴 Built for the lads · South Beach · World Cup 2026 🌴<br>
+    <span style="font-family:'Caveat',cursive;font-size:20px;color:var(--gold)">See you on the sand ⚽</span>
+  </footer>
+
+</div>
+
+<script>
+  // Pull a photo for each venue from Wikimedia/Unsplash-style source with graceful fallback.
+  // Uses Unsplash Source (no key) keyed to each venue's search terms; if it fails, the
+  // styled monogram fallback stays visible.
+  document.querySelectorAll('.ph[data-q]').forEach(function(ph){
+    var q = ph.getAttribute('data-q');
+    var img = document.createElement('img');
+    img.alt = q;
+    img.referrerPolicy = 'no-referrer';
+    img.src = 'https://source.unsplash.com/600x400/?' + encodeURIComponent(q);
+    img.onload = function(){ var f = ph.querySelector('.fallback'); if(f) f.style.display='none'; };
+    img.onerror = function(){ img.remove(); }; // leave fallback monogram
+    ph.insertBefore(img, ph.firstChild);
+  });
+</script>
+
+</body>
+</html>
